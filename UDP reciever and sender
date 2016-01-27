@@ -66,3 +66,62 @@ func main() {
 	select{}
 
 }
+
+next file
+
+package main
+import (
+    "fmt"
+    "net"
+    "os"
+    //"time"
+    "strconv"
+    "bufio"
+)
+
+/* A Simple function to verify error */
+func CheckError(err error) {
+    if err  != nil {
+        fmt.Println("Error: " , err)
+        os.Exit(0)
+    }
+}
+
+
+func main() {
+
+    ServerAddrUs, _ := net.ResolveUDPAddr("udp","129.241.187.23:33546")
+    ServerAddrThem, _ := net.ResolveUDPAddr("udp","129.241.187.146:33546")
+    conn, _ := net.Dial("tcp", ServerAddrUs, ServerAddrThem)
+
+    buf := make([]byte, 1024)
+    conn.read(buf)
+    fmt.Println(strconv.Itoa(buf))
+
+    //conn.write([] byte, "ricky" \0)
+
+    for {
+        
+    }
+
+    
+
+    
+
+/*
+
+    for {
+        // read in input from stdin
+        reader := bufio.NewReader(os.Stdin)
+        fmt.Print("Text to send: ")
+        text, _ := reader.ReadString('\n')
+
+        // send to socket
+        fmt.Fprintf(conn, text + "\n")
+
+        // listen for reply
+        message, _ := bufio.NewReader(conn).ReadString('\n')
+        fmt.Print("Message from server: "+message)
+    }*/
+
+}
