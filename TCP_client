@@ -22,14 +22,17 @@ func main() {
 	reader := bufio.NewReader(os.Stdin)
 
 	buf := make([]byte, 1024)
+	conn.Write([]byte("Connect to: 129.241.187.149:20002\x00"))
 
 	for {
+		//read from server
 		conn.Read(buf)
 		fmt.Println(string(buf))
+
+		//message to server
 		fmt.Print("Text to send: ")
 		input, _ := reader.ReadString('\n')
 		conn.Write([]byte(input + "\x00"))
-
 	}
 }
 
