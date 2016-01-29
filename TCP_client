@@ -1,0 +1,35 @@
+package main
+
+import (
+	"bufio"
+	"fmt"
+	"net"
+	"os"
+)
+
+/* A Simple function to verify error */
+func CheckError(err error) {
+	if err != nil {
+		fmt.Println("Error: ", err)
+		os.Exit(0)
+	}
+}
+
+func main() {
+
+	conn, _ := net.Dial("tcp", "129.241.187.23:33546")
+	//var IP string = "129.241.187.149:20002"
+	reader := bufio.NewReader(os.Stdin)
+
+	buf := make([]byte, 1024)
+
+	for {
+		conn.Read(buf)
+		fmt.Println(string(buf))
+		fmt.Print("Text to send: ")
+		input, _ := reader.ReadString('\n')
+		conn.Write([]byte(input + "\x00"))
+
+	}
+}
+
