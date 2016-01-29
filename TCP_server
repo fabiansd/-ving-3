@@ -1,1 +1,48 @@
+package main
+
+import (
+	"bufio"
+	"net"
+	"os"
+)
+import "fmt"
+
+// only needed below for sample processing
+
+func CheckError(err error) {
+	if err != nil {
+		fmt.Println("Error: ", err)
+		os.Exit(0)
+	}
+}
+
+func main() {
+
+	fmt.Println("Launching server...")
+
+	// listen on all interfaces
+	//129.241.187.149
+	ln, err := net.Listen("tcp", "129.241.187.149:20002")
+	CheckError(err)
+	// accept connection on port
+	conn, err := ln.Accept()
+	CheckError(err)
+
+	buf := make([]byte, 1024)
+	reader := bufio.NewReader(os.Stdin)
+
+	// run loop forever (or until ctrl-c)
+	for {
+		// will listen for message to process ending in newline (\n)
+		conn.Read(buf)
+
+		// output message received
+		fmt.Println("Message Received:", string(buf))
+
+		//send to client
+		fmt.Print("Text to send: ")
+		input, _ := reader.ReadString('\n')
+		conn.Write([]byte(input + "\x00"))
+	}
+}
 
