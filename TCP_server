@@ -2,13 +2,12 @@ package main
 
 import (
 	"bufio"
+	"fmt"
 	"net"
 	"os"
 )
-import "fmt"
 
-// only needed below for sample processing
-
+/* A Simple function to verify error */
 func CheckError(err error) {
 	if err != nil {
 		fmt.Println("Error: ", err)
@@ -18,28 +17,19 @@ func CheckError(err error) {
 
 func main() {
 
-	fmt.Println("Launching server...")
-
-	// listen on all interfaces
-	//129.241.187.149
-	ln, err := net.Listen("tcp", "129.241.187.149:20002")
-	CheckError(err)
-	// accept connection on port
-	conn, err := ln.Accept()
-	CheckError(err)
-
-	buf := make([]byte, 1024)
+	conn, _ := net.Dial("tcp", "129.241.187.23:33546")
+	//var IP string = "129.241.187.149:20002"
 	reader := bufio.NewReader(os.Stdin)
 
-	// run loop forever (or until ctrl-c)
+	buf := make([]byte, 1024)
+	conn.Write([]byte("Connect to: 129.241.187.149:20002\x00"))
+
 	for {
-		// will listen for message to process ending in newline (\n)
+		//read from server
 		conn.Read(buf)
+		fmt.Println(string(buf))
 
-		// output message received
-		fmt.Println("Message Received:", string(buf))
-
-		//send to client
+		//message to server
 		fmt.Print("Text to send: ")
 		input, _ := reader.ReadString('\n')
 		conn.Write([]byte(input + "\x00"))
